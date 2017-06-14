@@ -17,7 +17,7 @@
     <link href="assets/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
     <link rel="stylesheet" href="https://bootswatch.com/united/bootstrap.min.css">
     <link href="assets/css/style.css" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.1.1/firebaseui.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.1.1/firebaseui.css"/>
 
     <script src="https://cdn.firebase.com/libs/firebaseui/2.1.1/firebaseui.js"></script>
     <script type="text/javascript" src="assets/javascript/jquery-3.2.1.js"></script>
@@ -27,11 +27,23 @@
     <script type="text/javascript">
 
 
-        initApp = function() {
-            firebase.auth().onAuthStateChanged(function(user) {
+
+        initApp = function () {
+            // Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyDuxLc3E_wuGK82P1Ftv4vVYogt8qpFIz8",
+                authDomain: "productfir.firebaseapp.com",
+                databaseURL: "https://productfir.firebaseio.com",
+                projectId: "productfir",
+                storageBucket: "productfir.appspot.com",
+                messagingSenderId: "366162955614"
+            };
+            firebase.initializeApp(config);
+
+            firebase.auth().onAuthStateChanged(function (user) {
                 if (user) {
                     // User is signed in.
-console.log('Signing in a user');
+                    console.log('Signing in a user');
                     var displayName = user.displayName;
                     var email = user.email;
                     var emailVerified = user.emailVerified;
@@ -40,41 +52,35 @@ console.log('Signing in a user');
                     var phoneNumber = user.phoneNumber;
                     var providerData = user.providerData;
 
-                    sessionStorage.setItem('displayName', displayName)
-                    sessionStorage.setItem('email', email);
-                    sessionStorage.setItem('emailVerified', emailVerified);
-                    sessionStorage.setItem('photoURL', photoURL);
-                    sessionStorage.setItem('uid', uid);
-                    sessionStorage.setItem('phoneNumber', phoneNumber);
-                    sessionStorage.setItem('providerData', providerData);
 
-                    user.getToken().then(function(accessToken) {
-                        document.getElementById('sign-in-status').textContent = 'Signed in';
+                    user.getToken().then(function (accessToken) {
+                        console.log('Function get token');
+                        document.getElementById('sign-in-status').textContent = 'Signed in as: ';
                         document.getElementById('user-name').textContent = displayName;
-                        document.getElementById('sign-in').textContent = 'Sign out';
-                        document.getElementById('account-details').textContent = JSON.stringify({
-                            displayName: displayName,
-                            email: email,
-                            emailVerified: emailVerified,
-                            phoneNumber: phoneNumber,
-                            photoURL: photoURL,
-                            uid: uid,
-                            accessToken: accessToken,
-                            providerData: providerData
-                        }, null, '  ');
+                        //document.getElementById('sign-in').textContent = 'Sign out';
+
+
+                        sessionStorage.setItem('displayName', displayName)
+
+                        sessionStorage.setItem('email', email);
+                        sessionStorage.setItem('emailVerified', emailVerified);
+                        sessionStorage.setItem('photoURL', photoURL);
+                        sessionStorage.setItem('uid', uid);
+                        sessionStorage.setItem('phoneNumber', phoneNumber);
+                        sessionStorage.setItem('providerData', providerData);
                     });
                 } else {
                     // User is signed out.
-                    document.getElementById('sign-in-status').textContent = 'Signed out';
-                    document.getElementById('sign-in').textContent = 'Sign in';
-                    document.getElementById('account-details').textContent = 'null';
+                    document.getElementById('sign-in-status').textContent = 'Signed out ';
+                    document.getElementById('sign-in').textContent = 'Click the sign in link above to Sign in';
+                    //document.getElementById('account-details').textContent = 'null';
                 }
-            }, function(error) {
+            }, function (error) {
                 console.log(error);
             });
         };
 
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             initApp()
         });
     </script>
@@ -89,7 +95,7 @@ console.log('Signing in a user');
         <ul class="nav navbar-nav">
             <li><a href='index.html' class="active">Home</a></li>
             <li><a href='signin.html' class="active">Sign-In</a></li>
-            <li><a  id='signout' class="active">Sign-Out</a></li>
+            <li><a id='signout' class="active">Sign-Out</a></li>
 
         </ul>
     </div>

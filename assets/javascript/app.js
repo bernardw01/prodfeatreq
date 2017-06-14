@@ -6,16 +6,7 @@
 
 $(document).ready(function () {
 
-    // Initialize Firebase
-    var config = {
-        apiKey: "AIzaSyDuxLc3E_wuGK82P1Ftv4vVYogt8qpFIz8",
-        authDomain: "productfir.firebaseapp.com",
-        databaseURL: "https://productfir.firebaseio.com",
-        projectId: "productfir",
-        storageBucket: "productfir.appspot.com",
-        messagingSenderId: "366162955614"
-    };
-    firebase.initializeApp(config);
+
 
 
     // Get a reference to the database service
@@ -23,9 +14,11 @@ $(document).ready(function () {
     var sessionUser = sessionStorage.getItem('email');
 
     //Check to see if there is a logged in user otherwise dont display the full page.
-    if (!sessionUser) {
-        $('#activeRequests').hide();
+    if (!sessionStorage.getItem('email')) {
+        $('.panel').hide();
         console.log(sessionUser);
+    } else {
+        $('.panel').show();
     }
 
 
