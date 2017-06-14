@@ -1,0 +1,14 @@
+[
+  {
+    "trainName": "Acela Expres",
+    "destination": "Miami FL",
+    "schedStartTime": "13:45",
+    "schedInterval": "30"
+  },
+  {
+    "trainName": "Carbondale Expres",
+    "destination": "San Francisco FL",
+    "schedStartTime": "14:45",
+    "schedInterval": "15"
+  }
+]

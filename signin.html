@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Product Feature Intake Request Tool</title>
+    <!-- *******************************************************************************************
+       * TODO(DEVELOPER): Paste the initialization snippet from:
+       * Firebase Console > Overview > Add Firebase to your web app. *
+       ***************************************************************************************** -->
+
+    <link href="assets/css/reset.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+    <link href="assets/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://bootswatch.com/united/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.1.1/firebaseui.css"/>
+    <link href="assets/css/style.css" rel="stylesheet">
+
+    <script src="https://cdn.firebase.com/libs/firebaseui/2.1.1/firebaseui.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
+    <script type="text/javascript" src="assets/javascript/jquery-3.2.1.js"></script>
+    <script src="assets/javascript/config.js"></script>
+    <script src="assets/javascript/app.js"></script>
+
+    <script src="assets/javascript/firebase.4.1.2.js"></script>
+
+    <script type="text/javascript">
+
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyDuxLc3E_wuGK82P1Ftv4vVYogt8qpFIz8",
+            authDomain: "productfir.firebaseapp.com",
+            databaseURL: "https://productfir.firebaseio.com",
+            projectId: "productfir",
+            storageBucket: "productfir.appspot.com",
+            messagingSenderId: "366162955614"
+        };
+        firebase.initializeApp(config);
+
+        // FirebaseUI config.
+        var uiConfig = {
+            signInSuccessUrl: 'index.html',
+            signInOptions: [
+                // Leave the lines as is for the providers you want to offer your users.
+                firebase.auth.GoogleAuthProvider.PROVIDER_ID
+
+            ],
+            // Terms of service url.
+            tosUrl: '<your-tos-url>'
+        };
+
+        // Initialize the FirebaseUI Widget using Firebase.
+        var ui = new firebaseui.auth.AuthUI(firebase.auth());
+        // The start method will wait until the DOM is loaded.
+        ui.start('#firebaseui-auth-container', uiConfig);
+    </script>
+
+</head>
+<body>
+<!-- The surrounding HTML is left untouched by FirebaseUI.
+     Your app may use that space for branding, controls and other customizations.-->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Product Feature Intake Request Tool</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href='index.html' class="active">Home</a></li>
+
+        </ul>
+    </div>
+</nav>
+<h4>Please sign in to access this app....</h4>
+<div id="firebaseui-auth-container"></div>
+</body>
+</html>

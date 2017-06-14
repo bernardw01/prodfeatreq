@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: app.js</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: app.js</h1>
+
+
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* 
+ Bernard Williams
+ UCF Bootcamp APR2017 Week 5
+ Trivia Game
+ */
+
+//when the page loads do this
+
+//Initialize the game area
+
+//Tell the use to click the start button to start the game
+
+/* When the user clicks start do the following
+ 1. Randomly select the first question to be displayed
+ 2. Display the first question
+ 3. Start the timer
+ 4. If the time runs out before the user selects the right answer. Fade out the wrong answers and display for a few seconds before moving to the next question.
+ 5. Update the score and display it in the stats panel
+
+ */
+
+//TODO - Add code to track how many questions were asked and stop the game when there are no more questions left
+//TODO - Add code to update the current progress bar based on the percentage of questions asked
+//TODO - Add code to
+
+
+//Global Variables
+var totalElapsed = 0;
+var timeRemaining = 0;
+var initialTimeSet = 10;
+var timeAllowed = 21;
+var currentQuestionID = 0;
+var rightAnswer = 0;
+var questionCount = 0;
+var numRight = 0;
+var numWrong = 0;
+
+//  Variable that will hold our setInterval that runs the stopwatch
+var intervalId;
+
+//prevents the clock from being sped up unnecessarily
+var clockRunning = false;
+
+//Gamestate Object
+var gameState = {
+    inProgress: true,
+    waitingForAnswer: false,
+    currentQuestionRight: false,
+    timeUp: false
+};
+
+/**
+ * Our stopwatch object.
+ * @type {{time: number, lap: number, lapText: Array, reset: reset, start: start, stop: stop, recordLap: recordLap, count: count, timeConverter: timeConverter}}
+ */
+var stopwatch = {
+    time: 0,
+    lap: 1,
+    lapText: [],
+
+    reset: function () {
+        stopwatch.time = 0;
+        stopwatch.lap = 1;
+        clockRunning = false;
+
+
+        $("#display").text("00:00");
+        $("#laps").text("");
+    },
+
+    start: function () {
+           if (!clockRunning) {
+            intervalId = setInterval(stopwatch.count, 1000);
+            clockRunning = true;
+        }
+    },
+    stop: function () {
+        clearInterval(intervalId);
+        clockRunning = false;
+    },
+
+    recordLap: function () {
+           var currentTime = stopwatch.timeConverter(stopwatch.time);
+        stopwatch.lapText.push("Lap " + stopwatch.lap + " Current Time: " + currentTime);
+        $("#laps").html(stopwatch.lapText.join('&lt;br/>'));
+        stopwatch.lap++;
+    },
+    count: function () {
+        if (stopwatch.time &lt; timeAllowed) {
+            stopwatch.time++;
+            var displayTime = stopwatch.timeConverter(stopwatch.time);
+            $("#display").text(displayTime);
+            var timerBarVal = Math.round((stopwatch.time / timeAllowed) * 100);
+            setTimerBar(timerBarVal);
+        }
+
+    },
+
+    timeConverter: function (t) {
+        //Takes the current time in seconds and convert it to minutes and seconds (mm:ss).
+        var minutes = Math.floor(t / 60);
+        var seconds = t - minutes * 60;
+
+        if (seconds &lt; 10) {
+            seconds = "0" + seconds;
+        }
+
+        if (minutes === 0) {
+            minutes = "00";
+        } else if (minutes &lt; 10) {
+            minutes = "0" + minutes;
+        }
+
+        return minutes + ":" + seconds;
+    }
+};
+
+/**
+ * This function sets the value of the on screen progress bar.
+ * @param val
+ */
+function setProgressBar(val) {
+    $('#progressBar').attr('style', 'width:' + val + '%');
+    $('#progressBar').attr('aria-valuenow', val);
+    $('#progressBar').text(val + '%');
+}
+
+function setTimerBar(val) {
+    $('#timerProgressBar').attr('style', 'width:' + val + '%');
+    $('#timerProgressBar').attr('aria-valuenow', val);
+    $('#timerProgressBar').text(val + '%');
+}
+$(document).ready(function () {
+        gameInit();
+
+
+//Click event handlers
+
+        $('#startBtn').click(displayQuestion);
+        $('#resetBtn').on('click', gameInit);
+
+
+        function evaluateResponse() {
+
+            console.log('---- Evaluate Response Function');
+            var state = gameState.toSource();
+            console.log(state);
+            if (gameState.waitingForAnswer) {
+                gameState.waitingForAnswer = false;
+                var selectedAnswer = $(this).attr('ID');
+                //If we got the answer right
+                if (selectedAnswer == rightAnswer) {
+                    console.log('clicked right answer');
+                    stopwatch.recordLap();
+                    stopwatch.reset();
+                    stopwatch.stop();
+                    gameState.currentQuestionRight = true;
+                    $(this).addClass('rightAnswer');
+                    console.log('ID Selected ' + $(this).attr('ID'));
+                    console.log('right answer ' + rightAnswer);
+                    setTimerBar(0);
+numRight++;
+                } else {
+//If we got the answer wrong
+                    $(this).addClass('wrongAnswer');
+                    stopwatch.stop();
+                    $("#laps").text("Sorry but you got this answer wrong.");
+//TODO - Add code to increment and display the number right and wrong
+                }
+            }
+            if ((currentQuestionID) &lt;= (questionBank.length - 1)) {
+                setTimeout(displayQuestion, 5000);
+            }
+        }
+
+        /**
+         * This function takes no parms and initializes thhe game
+         */
+        function gameInit() {
+            gameState.inProgress = true;
+            gameState.currentQuestionRight = false;
+            gameState.waitingForAnswer = false;
+            stopwatch.stop();
+            stopwatch.reset;
+            setProgressBar(0);
+            setTimerBar(0);
+            currentQuestionID = 0;
+            $('#qa').remove();
+
+            console.log('game initialized');
+        }
+
+
+        /**
+         * This function obtains a question from the question back and passes it to the calling function.
+         * @return {Object}
+         */
+        function getQuestion() {
+
+            //var randNum = getRandomInt(0, questionBank.length - 1);
+            //console.log(questionBank[randNum]);
+            var question = questionBank[currentQuestionID];
+            console.log('---- Get Question');
+            console.log(currentQuestionID);
+            currentQuestionID++;
+            return question;
+        }
+
+        /**
+         * This function displays the question in the Your Questions section
+         */
+        function displayQuestion() {
+            console.log('---- Display Question function');
+            console.log(gameState.toSource());
+            //Clear the question if there was one
+            $('#qa').remove();
+
+            //start the game
+            if (gameState.inProgress) {
+                gameState.waitingForAnswer = true;
+                stopwatch.start()
+
+                //console.log(getQuestion());
+                var currQ = getQuestion();
+                var qp = $('#questionPanel');
+                var qa = $('&lt;div>'); //question &amp; answer group
+                qa.attr('ID', 'qa');
+                var qh = $('&lt;div>');
+                qh.addClass('alert alert-info');
+                qh.text(currQ.question);
+                qa.append(qh);
+
+                //This displays each answer line.
+                for (var i = 0; i &lt; currQ.answers.length; i++) {
+                    var ans = $('&lt;div>');
+                    ans.addClass('answer');
+                    ans.attr('id', i);
+                    var icon = $('&lt;span>');
+                    //icon.addClass('glyphicon glyphicon-check answerIcon');
+                    var text = $('&lt;span>');
+                    text.addClass('answerText');
+                    text.append(displayAnswer(currQ.answers[i]));
+                    icon.append(text);
+                    ans.append(icon);
+                    qa.append(ans);
+                }
+                qp.append(qa);
+
+                $('.answer').bind('click', evaluateResponse);
+                rightAnswer = currQ.rightAnswerID;
+                console.log('---- Right Answer ID ' + currQ.rightAnswerID)
+            }
+
+        }
+
+        /**
+         * Get a random integer between `min` and `max`.
+         *
+         * @param {number} min - min number
+         * @param {number} max - max number
+         * @return {int} a random integer
+         */
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1) + min);
+        }
+
+        /**
+         * This function creates an HTML formatted answer to be displayed.
+         * @param answerTxt Text of the answer from the question object
+         * @param answerId The Index of the particular answer
+         * @returns {*|jQuery|HTMLElement}
+         */
+        function displayAnswer(answerTxt, answerId) {
+            var answer = $('&lt;span>');
+            answer.attr('id', answerId);
+            //answer.addClass('answer');
+            answer.text(answerTxt);
+            return answer
+        }
+
+
+    }
+);
+
+
+
+
+</code></pre>
+        </article>
+    </section>
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2>
+    <h3>Global</h3>
+    <ul>
+        <li><a href="global.html#setProgressBar">setProgressBar</a></li>
+        <li><a href="global.html#stopwatch">stopwatch</a></li>
+    </ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon May 29 2017 15:31:06
+    GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
