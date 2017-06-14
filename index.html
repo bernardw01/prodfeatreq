@@ -27,7 +27,6 @@
     <script type="text/javascript">
 
 
-
         initApp = function () {
             // Initialize Firebase
             var config = {
@@ -68,12 +67,16 @@
                         sessionStorage.setItem('uid', uid);
                         sessionStorage.setItem('phoneNumber', phoneNumber);
                         sessionStorage.setItem('providerData', providerData);
+
+                        $('.panel').show();
+
                     });
                 } else {
                     // User is signed out.
-                    document.getElementById('sign-in-status').textContent = 'Signed out ';
-                    document.getElementById('sign-in').textContent = 'Click the sign in link above to Sign in';
+                    document.getElementById('sign-in-status').textContent = 'You are currently signed out ';
+                    document.getElementById('sign-in').textContent = 'Please Click the sign in link above to Sign in';
                     //document.getElementById('account-details').textContent = 'null';
+                    $('.panel').hide();
                 }
             }, function (error) {
                 console.log(error);
